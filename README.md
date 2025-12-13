@@ -2,44 +2,54 @@
 
 # TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries
 
-_This is the official implementation of [Self-Reflection Enhances Large Language Models Towards Substantial Academic Response](https://doi.org/10.1038/s44387-025-00045-3) in npj Artificial Intelligence, which can generate responses to academic paper review comments. The system supports using a reflection library to enhance response quality._
-
+_This is the official implementation of **TimeSeries2Report (TS2R)** in the paper "TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries"_
+[![Paper](https://img.shields.io/badge/Paper-PDF-%2300B4FF)](https://doi.org/your-paper-doi-here)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
 </div>
 
+<p align="center">
+⚡ &nbsp;<a href="#-key-features">Key Features</a>
+| &nbsp;<a href="#-ts2r-framework">Framework</a>
+| &nbsp;<a href="#-installation--setup">Setup</a>
+| &nbsp;<a href="#-quick-start">Quick Start</a>
+| &nbsp;<a href="#-results">Results</a>
+| &nbsp;<a href="#-downstream-tasks">Downstream Tasks</a>
+</p>
 
-## Method
-✅ **Transform time-series data into textual reports**
+---
+## ⚡ Key Features
+✅ **Zero-shot time-series analysis** - Enables LLMs to interpret battery data without retraining  
+✅ **Semantic enrichment** - Converts raw sensor data into structured natural language reports  
+✅ **Multi-task support** - SOC prediction, anomaly detection, and charge management  
+✅ **Expert-level performance** - Achieves >90% factual accuracy in benchmark tests  
+✅ **Model-agnostic** - Works with diverse LLMs (Qwen, DeepSeek, ChatGLM, Llama)  
+✅ **No training required** - Lightweight and ready for deployment  
 
-✅ **Enable LLM's application in time-series analysis without any training**
+**TS2R-integrated LLMs achieve expert-level decision quality without model retraining or architecture modification, establishing a practical path for adaptive LLM-driven battery intelligence.**
 
-✅ **Showcase LLM-driven battery management--SOC predcition, anomaly detection, charging/discharging management**
+---
 
-We present TimeSeries2Report (TS2R), a prompting framework that converts raw lithium-ion battery operational time-series into structured, semantically enriched reports, enabling LLMs to reason, predict, and make decisions in BESS management scenarios. TS2R encodes short-term temporal dynamics into natural language through a combination of segmentation, semantic abstraction, and rule-based interpretation, effectively bridging low-level sensor signals with high-level contextual insights.
+## TS2R Framework
+The TimeSeries2Report framework bridges low-level sensor signals with high-level contextual insights through:
+1. **Time-series Segmentation**  
+   Splits time-series into 10-timestamp slices and extracts temporal attributes  
+   ```python
+   # Pseudo-code for segmentation
+   segments = [data[i:i+window] for i in range(0, len(data), step)]
+   ```
+2. **Descriptor Assignment**
+   Converts numerical features to descriptors (e.g., “increasing”, “stable”) using rule-based mapping
+   Trend: increasing → “Voltage shows steady upward progression”
+   
+3. **Report Synthesis**
+   LLM integrates descriptors into coherent operational reports
+Prompt:
+"You are a battery expert. Describe cell behavior based on: ..." (see `prompting_engineering.py` for details)
 
-**TS2R-integrated LLMs achieve expert level decision quality and predictive consistency without retraining or architecture modification, establishing a practical path for adaptive, LLM-driven battery intelligence.**
-
-![Dual-loop reflection method](figs/figure_method.svg)
+![TS2R Framework Architecture](figs/figure_method.svg)
 <p align="center"><em>Figure: Dual-loop reflection method overview</em></p>
 
-## Features
-
-1. **PDF Paper Parsing**: Upload PDF files and automatically extract text content
-2. **Review Comment Input**: Text input box for entering reviewer comments
-3. **Reflection Mode**: Optional RAG reflection library enhancement feature that optimizes responses based on historical data
-4. **Custom Rules Management**:
-   - Save custom rules to local storage
-   - Delete saved rules
-   - Choose whether to insert custom rules into prompts
-5. **API Configuration**: Configure model, API Key, and API URL
-6. **Reasoning Content Display**: If the model supports reasoning, displays the reasoning process
-7. **Two-Stage Response Generation**:
-   - Initial Response: Generated directly based on the paper and reviewer comments
-   - Final Response: Optimized initial response based on historical data from the reflection library
-
-![Web application interface](figs/webpage_00.png)
-<p align="center"><em>Figure: Web interface preview</em></p>
-
-## Installation & Setup
+## Quick Start
 
 ### 1. Install Dependencies
 
@@ -47,108 +57,97 @@ We present TimeSeries2Report (TS2R), a prompting framework that converts raw lit
 pip install -r requirements.txt
 ```
 
-### 2. Prepare Reflection Library
-
-If you want to use reflection mode, ensure the following files exist:
-- `./chroma_store_gpu/parent_child_store.json`
-- `./chroma_store_gpu/chroma.sqlite3`
-- `./all-MiniLM-L6-v2/` embedding model directory
-
-### 3. Launch the Application
+### 2. Configure API Access
+Create .env file with your LLM credentials:
 
 ```bash
-streamlit run app.py
+# .env
+OPENAI_API_KEY="your_api_key_here"
+OPENAI_BASE_URL="https://api.openai.com/v1"
+# For DeepSeek/other providers:
+DEEPSEEK_API_KEY="your_key"
 ```
 
-The application will automatically open in your browser at: `http://localhost:8501`
+### 3. Prepare Datasets
 
-## Windows Standalone (EXE)
+Place battery time-series data in `./time_series_data` directory.
 
-No Python or extra packages required. To use the EXE:
+### 4. Battery time-series report generation through simple API call
 
-1. Download the executable folder or zip.
-2. Download and place the following two folders next to the EXE (same directory):
-   - `all-MiniLM-L6-v2` (HuggingFace embedding model directory)
-   - `chroma_store_gpu` (vector store directory with `chroma.sqlite3` and `parent_child_store.json`)
+run `TS2R_generation_main.py` with the following parameter settings:
 
-   Download links:
-   - [all-MiniLM-L6-v2](https://hf-mirror.com/sentence-transformers/all-MiniLM-L6-v2)
-   - [chroma_store_gpu](https://drive.google.com/file/d/1_xj6eevkYw3nYbdGkWTeAOtxVqQHz2bQ/view?usp=sharing)
+```python
+# set utilized LLM
+llm_list = ['qwen3-14b', 'qwen3-32b', 'qwen3-235b-a22b-instruct-2507', 'deepseek-chat', 'glm-4.5']
+OPENAI_MODEL = llm_list[0] 
 
-3. Expected directory layout:
+# set TOTAL_CNT (line 281) to decide the processing and generation number of time-seires reports
+TOTAL_CNT = 3 
 
-```
-PaperReviewLLM/
-  ├── PaperReviewLLM_Dir.exe
-  ├── _internal/
-  ├── all-MiniLM-L6-v2/
-  └── chroma_store_gpu/
-      ├─ chroma.sqlite3
-      └─ parent_child_store.json
-```
+# revise the data reading method (lines 285~288) according your own data format (task JSONL file as example) 
+dataset_name = "anomaly_data.jsonl"
+dataset = PreprocessedDataset(dataset_name)
+data_v_win_train, data_c_win_train = prre.read_data_from_json(dataset)
+# size of data_v_win_train: (sequence_length, variable_num, battery_num)
+# size of data_c_win_train: (sequence_length, 1) (for shared-variable like current for series-connected batteries)
 
-4. Double-click `PaperReviewLLM_Dir.exe`. Your browser will open at `http://localhost:8501`.
-5. To use Reflection Mode: enable it in the sidebar and click “Load Reflection Library”. The default path will automatically point to the `chroma_store_gpu` folder in the EXE directory.
-
-Notes:
-- The EXE bundles Python and required packages, but does not include the large `all-MiniLM-L6-v2` and `chroma_store_gpu` folders. Download and place them next to the EXE.
-- The app looks for the `all-MiniLM-L6-v2` model folder next to the EXE.
-
-## Quick Start
-
-### Basic Mode (Without Reflection)
-
-1. Configure Model, API Key, and API URL in the sidebar
-2. Uncheck "Enable Reflection Mode"
-3. Upload a PDF file on the left side of the main interface
-4. Enter reviewer comments
-5. Click "Generate Response"
-
-### Using Reflection Mode
-
-1. Configure Model, API Key, and API URL in the sidebar
-2. Check "Enable Reflection Mode"
-3. Enter the reflection library path (default: `./chroma_store_gpu`)
-4. Click "Load Reflection Library" button
-5. Upload a PDF file on the left side of the main interface
-6. Enter reviewer comments
-7. Click "Generate Response"
-
-
-## Important Notes
-
-1. **API Key Storage**: API keys are stored in memory during the session. You need to re-enter them after refreshing the page.
-
-2. **Custom Rules Storage**: Rules are saved to the `custom_rule.txt` file and can be edited at any time. They remain accessible after restarting the application.
-
-3. **Reflection Library Loading**: The reflection library only needs to be loaded once per session and remains available.
-
-4. **Reasoning Content Processing**: If the model returns reasoning content (`reasoning_content`), it will be displayed in the initial response but will not be included in the messages during the reflection phase.
-
-5. **Reflection Mode Requirements**: Using reflection mode requires loading the reflection library first. Ensure the vector library path is correct.
-
-## Build (Developers)
-
-Build a standalone EXE on Windows with PyInstaller:
-
-1. Install dependencies (recommended in a clean venv):
-
-```bash
-pip install -r requirements.txt
-pip install pyinstaller
+# set the output path (line 296)
+OUTPUT_DATASET = f'{dir_path}\\report_{OPENAI_MODEL}_zju_{TOTAL_CNT}_{timestamp[:8]}.jsonl'
 ```
 
-2. Run the build command (bundles `app.py` and helper modules as data so Streamlit can run the script by path):
+### 5. LLM-driven battery downstream task application --- SOC prediction
 
-```bash
-pyinstaller --noconfirm --clean --name "PaperReviewLLM_Dir" --onedir --windowed   --add-data "app.py;." --add-data "RAG_vectorstore.py;."   --collect-all "streamlit" --collect-all "langchain" --collect-all "chromadb"   --collect-data "langchain_chroma"   --collect-data "langchain_huggingface"   --hidden-import "pysqlite3"   launch.py
+run `downstream_SOC_prediction.py` with the following parameter settings:
+
+```python
+# set utilized LLM
+OPENAI_MODEL = "qwen3-14b"
+
+# set the path to save the SOC precition results (lines 123~130)
+current_file_path = Path(__file__)
+test_set = '20251210'
+dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
+
+# add the path 
+dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
 ```
 
-Notes:
-- Entry point is `launch.py`, which programmatically runs `streamlit run app.py`.
-- `--add-data` places `app.py` and `RAG_vectorstore.py` next to the unpacked EXE so Streamlit can run by file path.
-- The large `all-MiniLM-L6-v2` and `chroma_store_gpu` folders are NOT bundled. Place them next to the EXE (see “Windows Standalone” section).
-- The app reads/writes `custom_rule.txt` in the working directory (next to the EXE). Do NOT bundle it so users can edit and persist their rules.
+### 6. LLM-driven battery downstream task application --- anomaly detection
+
+run `downstream_anomaly_detection.py` with the following parameter settings:
+
+```python
+# set utilized LLM
+OPENAI_MODEL = "qwen3-14b"
+
+# set the path to save the SOC precition results (lines 123~130)
+current_file_path = Path(__file__)
+test_set = '20251210'
+dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
+
+# add the path 
+dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+```
+
+### 7. LLM-driven battery downstream task application --- charging/discharging management
+
+run `downstream_charge_management.py` with the following parameter settings:
+
+```python
+# set utilized LLM
+OPENAI_MODEL = "qwen3-14b"
+
+# set the path to save the SOC precition results (lines 123~130)
+current_file_path = Path(__file__)
+test_set = '20251210'
+dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
+
+# add the path 
+dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+```
+## Results
+
+## Vidio for showcase
 
 ## 🔗 Citation
 
