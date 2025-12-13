@@ -18,7 +18,7 @@ We present TimeSeries2Report (TS2R), a prompting framework that converts raw lit
 
 **TS2R-integrated LLMs achieve expert level decision quality and predictive consistency without retraining or architecture modification, establishing a practical path for adaptive, LLM-driven battery intelligence.**
 
-![Dual-loop reflection method](figs/figure_method.png)
+![Dual-loop reflection method](figs/figure_method.svg)
 <p align="center"><em>Figure: Dual-loop reflection method overview</em></p>
 
 ## Features
