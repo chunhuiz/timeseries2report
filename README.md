@@ -8,7 +8,15 @@ _This is the official implementation of [Self-Reflection Enhances Large Language
 
 
 ## Method
-We design a large language model (LLM)-assisted writing framework. LLMs often output responses that are polished in structure and style but fail to address the core of the comment. Inspired by metacognition, we propose a dual-loop reflection method. First, the LLM critiques its own reasoning process against human reference responses (extrospection). The reflections gained from this process build a reflection bank. This bank is then retrieved during the reasoning process to facilitate introspection, allowing the LLM to overcome previous errors. The reflection bank was constructed using 4,000 papers and 79,000 comments from Nature group journals.
+✅ **Transform time-series data into textual reports**
+
+✅ **Enable LLM's application in time-series analysis without any training**
+
+✅ **Showcase LLM-driven battery management--SOC predcition, anomaly detection, charging/discharging management**
+
+We present TimeSeries2Report (TS2R), a prompting framework that converts raw lithium-ion battery operational time-series into structured, semantically enriched reports, enabling LLMs to reason, predict, and make decisions in BESS management scenarios. TS2R encodes short-term temporal dynamics into natural language through a combination of segmentation, semantic abstraction, and rule-based interpretation, effectively bridging low-level sensor signals with high-level contextual insights.
+
+**TS2R-integrated LLMs achieve expert level decision quality and predictive consistency without retraining or architecture modification, establishing a practical path for adaptive, LLM-driven battery intelligence.**
 
 ![Dual-loop reflection method](figs/method_00.png)
 <p align="center"><em>Figure: Dual-loop reflection method overview</em></p>
