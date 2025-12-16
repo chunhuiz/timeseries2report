@@ -125,7 +125,7 @@ class PreprocessedDataset:
                 })
         return samples
 
-def convert_descriptor_to_report(
+def direct_report(
     data_v_seen,
     data_c_seen
     ):
@@ -227,7 +227,7 @@ def generate_report_from_dataset(data_v_win_train, data_c_win_train):
             data_c_i = data_c_win_train[i]
             
             # Get all descriptive reports
-            item = convert_descriptor_to_report(data_v_i, data_c_i)
+            item = direct_report(data_v_i, data_c_i)
             
             # Prepare output structure
             cur_data = {
@@ -264,3 +264,4 @@ if __name__ == '__main__':
     # Generate and save QA dataset
 
     generate_report_from_dataset(data_v_win_train, data_c_win_train)
+
