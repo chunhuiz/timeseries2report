@@ -45,6 +45,15 @@ sys.path = original_sys_path
 
 
 def get_estimate_var_ind(des):
+    """
+    Extracts individual cell-level evaluation metrics
+    
+    Args:
+        des: Description dictionary containing cell info
+        
+    Returns:
+        Tuple of (shape metrics, statistical metrics)
+    """
     if 'cells_info' in des:
         des_cell = des['cells_info']
     elif 'raw_response' in des:
@@ -84,7 +93,12 @@ def get_estimate_var_ind(des):
     return estimate_shape_list, estimate_stat_list
 
 def get_estimate_list(pick_sample, has_glm=False):
-
+    """
+    Wrapper function to process all cell descriptions in a sample
+    
+    Handles 4 cell descriptions (c2-c5) per sample
+    """    
+    
     json_list2 = pick_sample['descript c2']
     if isinstance(json_list2, str):
         description_list2 = json.loads(json_list2)
@@ -95,6 +109,7 @@ def get_estimate_list(pick_sample, has_glm=False):
     return estimate_shape_list, estimate_stat_list
     
 def splice_result(result_list, response_list):
+    """Combines evaluation results with original data for analysis"""
     results_all = []
     for i in range(len(response_list)):
         evaluate_list = response_list[i][0]
@@ -107,6 +122,7 @@ def splice_result(result_list, response_list):
 
 
 def pick_data(data, pers=0, sample=[]):
+    """Filters and aggregates results by specified criteria"""
     if pers=="fluc" and 5 in sample:
         print("aaa")
     if len(sample) != 0:
@@ -120,6 +136,7 @@ def pick_data(data, pers=0, sample=[]):
     return data, data_list
 
 def read_pickle_list(all_results):
+    """Loads and transforms pickled results into evaluation format"""
     result_tran = [0] * len(all_results)
     for i in range(len(all_results)):
         result_read = all_results[i]
@@ -235,4 +252,5 @@ for model_picked in all_data.keys():
 data_metric = np.stack(data_metric)
 
 output_results = [data_metric[:,:,k].T for k in range(4)]
+
     
