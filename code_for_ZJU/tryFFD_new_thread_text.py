@@ -18,14 +18,14 @@ import numpy as np
 from zai import ZhipuAiClient
 
 # Configuration for LLM API
-OPENAI_API_KEY = "sk-e76205eae508447dbe165ad68b158858"
-OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 OPENAI_MODEL = "qwen3-14b"  # Default model (can be changed to 'glm-4.5' etc.)
 
 # Initialize appropriate client based on model type
 if 'glm' in OPENAI_MODEL: 
-    client = ZhipuAiClient(api_key="13ab570616de4823b2777e9b74041126.Xkj0uHXFaGHGH1Fn")
+    client = ZhipuAiClient(api_key="YOUR API KEY")
 else:
+    OPENAI_API_KEY = "YOUR API KEY"
+    OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     client = OpenAI(
         api_key=OPENAI_API_KEY,
         base_url=OPENAI_BASE_URL,
@@ -87,7 +87,7 @@ def process_sample(idx, sample, instruct, client, OPENAI_MODEL):
         print(f"Sample {idx} failed: {str(e)}")
         return (idx, None)
 
-class PreprocessedQADataset:
+class PreprocessedTimeseries:
     """Handles loading and preprocessing of battery monitoring data"""
     
     def __init__(self, jsonl_file):
@@ -111,8 +111,8 @@ class PreprocessedQADataset:
         return samples
 
 if __name__ == "__main__":
-    # Primary instruction template for anomaly detection
     
+    # Primary instruction template for charging/discharging management
     
     instruct3 = ("""Please analyze the following Time-Series of battery module to generate precise, actionable forecasts for charge and discharge cycle management.
                 Your Primary Task:
@@ -147,18 +147,26 @@ Output Example 2 (Discharging):
 4. The maximal, minimal, average SOC refer to the highest, lowest, and average SOC value among all individual battery cells within the module.
                 """)
     
-    print("Model in use:", OPENAI_MODEL)
+    # Initialize dataset
+    current_file_path = Path(__file__)
+    test_set = '20251210'
     
-    dataset = PreprocessedQADataset("template_mana_qwen3-32b_xs_20251021.jsonl")
+    # the path to save
+    dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
+    
+    dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+    
+    dataset = PreprocessedTimeseries(dataset_name)
     sample_pick = dataset.samples
-    
-    sample_pick = [sample_pick[0]] + [sample_pick[0]] + [sample_pick[0]] + [sample_pick[0]] + [sample_pick[0]]
+
+    # 5 independent API call for the 47th sample (you can pick other samples)
+    sample_pick = [sample_pick[46]] + [sample_pick[46]] + [sample_pick[46]] + [sample_pick[46]] + [sample_pick[46]]
     
     # Parallel processing configuration
     max_workers = 10  # Number of concurrent API calls
     results = [None] * len(sample_pick)  # Pre-allocated results array
     
-    # Process samples in parallel (testing with sample 45)
+    # Process samples in parallel
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit analysis tasks
         futures = [
@@ -170,7 +178,7 @@ Output Example 2 (Discharging):
                 client=client,
                 OPENAI_MODEL=OPENAI_MODEL
             )
-            for i in [45]  # Single sample for testing
+            for i in range(len(sample_pick))
         ]
         
         # Collect results as they complete
@@ -178,4 +186,15 @@ Output Example 2 (Discharging):
             idx, answers = future.result()
             results[idx] = answers
 
+
         print("\n" + "-"*50 + " All samples processed " + "-"*50 + "\n")
+# Parse and format results
+    result_list = []
+    for idx, answers in enumerate(results):
+        if answers is not None:
+            match = re.search(r'<ans>(.*?)</ans>', answers)
+            result_list.append(match.group(1) if match else -1)
+        else:
+            print(f"Sample {idx} processing failed\n")
+    
+    result_list = np.array(result_list)
