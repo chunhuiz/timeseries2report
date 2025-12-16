@@ -5,13 +5,10 @@ This system predicts the average SOC of battery modules by:
 1. Processing time-series battery data (temperature, voltage, SOC) for 16 cells
 2. Using large language models for SOC forecasting
 3. Supporting parallel processing for efficient batch predictions
-4. Providing both text and visual representations of battery states
 
 Key Features:
 - Multi-threaded API calls to LLM services (OpenAI, ZhipuAI)
 - Configurable for different LLM providers
-- SOC prediction with uncertainty estimation
-- Data visualization capabilities
 """
 
 import os
@@ -28,16 +25,15 @@ import numpy as np
 from zai import ZhipuAiClient
 import pickle
 
-# Configuration for LLM API
-OPENAI_API_KEY = "sk-e76205eae508447dbe165ad68b158858"
-OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-# OPENAI_MODEL = "qwen3-14b"  # Default model (can be changed to 'glm-4.5' etc.)
-OPENAI_MODEL = "glm-4.5"  # Default model (can be changed to 'glm-4.5' etc.)
+# OPENAI_MODEL = "qwen3-14b"  
+OPENAI_MODEL = "glm-4.5" 
 
 # Initialize appropriate client based on model type
 if 'glm' in OPENAI_MODEL: 
-    client = ZhipuAiClient(api_key="13ab570616de4823b2777e9b74041126.Xkj0uHXFaGHGH1Fn")
+    client = ZhipuAiClient(api_key="YOUR API KEY")
 else:
+    OPENAI_API_KEY = "YOUR API KEY"
+    OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     client = OpenAI(
         api_key=OPENAI_API_KEY,
         base_url=OPENAI_BASE_URL,
@@ -95,7 +91,7 @@ def process_sample(idx, sample, instruct, client, OPENAI_MODEL):
         print(f"Sample {idx} failed: {str(e)}")
         return (idx, None)
 
-class PreprocessedQADataset:
+class PreprocessedTimeseries:
     """Handles loading and preprocessing of battery time-series data from JSONL files"""
     def __init__(self, jsonl_file):
         """
@@ -134,9 +130,7 @@ class PreprocessedQADataset:
     
 
 if __name__ == "__main__":
-    # 从环境变量获取 API 密钥
-    api_key = OPENAI_API_KEY
-    # 创建评估器    
+
     instruct2 = ("""Please analyze the following Time-Series of battery module, and answer the question:
                 please forecast the possible value of average SOC of all the cells in the next 10 minutes. (the sampling interval of involved time series is 1 minute.)
                 Note:
@@ -151,14 +145,14 @@ if __name__ == "__main__":
     
     # the path to save
     dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
-    
-    # dataset_name = f'C:\\Users\\14525\\Desktop\\XS-REPORT\\2predict1128_{OPENAI_MODEL}.jsonl'
+
+    # pick the test dataset
     dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
-    
-    dataset = PreprocessedQADataset(dataset_name)
+
+    # pick the time-series data from dataset by PreprocessedTimeseries function 
+    dataset = PreprocessedTimeseries(dataset_name)
     sample_pick = dataset.samples
     
-    # dataset = PreprocessedQADataset("template_ad_qa_dsv3_10.jsonl")
     sample_pick = dataset.samples
     # Configure parallel processing
     max_workers = 5  # Adjust based on API rate limits
@@ -176,7 +170,7 @@ if __name__ == "__main__":
                 client=client,
                 OPENAI_MODEL=OPENAI_MODEL
             )
-            for i in [46]
+            for i in range(len(sample_pick))
         ]
         
         # Collect results as they complete
@@ -201,4 +195,5 @@ if __name__ == "__main__":
     
     # Reshape results for analysis
     result_list = np.array(result_list).reshape(1,-1)
+
     print("Model used:", OPENAI_MODEL)
