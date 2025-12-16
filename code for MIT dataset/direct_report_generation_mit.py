@@ -131,7 +131,7 @@ class PreprocessedDataset:
                 })
         return samples
 
-def convert_descriptor_to_report(data_v_seen):
+def direct_report(data_v_seen):
     
     instruction = (f"There are time series collected from LIB cells.")
 
@@ -206,7 +206,7 @@ def generate_report_from_dataset(data_v_win_train):
             print(f"the {i+1} th generation!")
             data_v_i = data_v_win_train[i]
         
-            item = convert_descriptor_to_report(data_v_i)
+            item = direct_report(data_v_i)
             
             cur_data = {
                 'sample id': i+1,
@@ -231,3 +231,4 @@ if __name__ == '__main__':
     data_v_win_train, _ = prre.read_data_from_json(dataset, dataset_name = 'mit')
     print("info: MIT generation, model: ", OPENAI_MODEL)
     generate_report_from_dataset(data_v_win_train)
+
