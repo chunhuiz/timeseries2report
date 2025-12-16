@@ -32,21 +32,18 @@ import prompt_engineering as pe
 
 sys.path = original_sys_path
 
-# Configuration for LLM API access
-OPENAI_API_KEY = "sk-e76205eae508447dbe165ad68b158858"
-OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-
 # Model selection (Qwen by default, GLM alternative commented out)
 OPENAI_MODEL = "qwen3-14b"
 # OPENAI_MODEL = "glm-4.5"
 
 # Initialize appropriate API client
 if 'glm' in OPENAI_MODEL: 
-    client = ZhipuAiClient(api_key="13ab570616de4823b2777e9b74041126.Xkj0uHXFaGHGH1Fn")
-    # client = ZhipuAiClient(api_key="0eaf5ebe67a94c7bbd66d2373bc7d53d.xglPgSVXC2EZg0Rr")
+    client = ZhipuAiClient(api_key="YOUR API KEY")
+    
 else:
+    OPENAI_API_KEY = "YOUR API KEY"
+    OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     client = OpenAI(
-        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
         api_key= OPENAI_API_KEY,
         base_url=OPENAI_BASE_URL,
     )
@@ -157,18 +154,16 @@ Output Example 2 (Discharging):
     # the path to save
     dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
     
-    # dataset_name = f'C:\\Users\\14525\\Desktop\\XS-REPORT\\2predict1128_{OPENAI_MODEL}.jsonl'
     dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
 
     dataset = PreprocessedQADataset(dataset_name)
-    # dataset = PreprocessedQADataset("template_ad_qa_dsv3_10.jsonl")
 
     # Prepare samples (testing with first sample repeated)
     sample_pick = dataset.samples
     
-    # 5 independent API call
+    # 5 independent API call for the 47th sample (you can pick other samples)
     sample_pick = [sample_pick[46]] + [sample_pick[46]] + [sample_pick[46]] + [sample_pick[46]] + [sample_pick[46]]
-    # print(len(sample_pick))
+
     max_workers = 10  # Concurrent API call limit
     
     # Initialize results storage
@@ -205,4 +200,5 @@ Output Example 2 (Discharging):
         else:
             print(f"Sample {idx} processing failed\n")
     
+
     result_list = np.array(result_list)
