@@ -41,33 +41,6 @@ import process_evaluation as pr
 
 sys.path = original_sys_path
 
-
-def get_key_value(data, key_name, case_sensitive=False):
-    """
-    Flexible dictionary value lookup with substring matching
-    
-    Args:
-        data: Dictionary to search
-        key_name: Substring to match in keys
-        case_sensitive: Whether to match case
-        
-    Returns:
-        Matched value or alarming errors
-    """
-    search_str = key_name if case_sensitive else key_name.lower()
-    
-    for key in data:
-        key_str = key if case_sensitive else str(key).lower()
-        if search_str in key_str:
-            value_to_return = data[key]
-            if len(value_to_return) == 0:
-                return 'none'
-            else:
-                return value_to_return
-            
-    raise KeyError('not found '+key_name)
-
-
 def get_estimate_var_ind(des):
     """
     Extracts individual cell-level evaluation metrics
@@ -101,13 +74,13 @@ def get_estimate_var_ind(des):
             for k in estimate_sem1:
                 if k == 'fluctuation':
                     if k not in des_cell[i][j]:
-                        des_per = get_key_value(des_cell[i][j], 'flucutation')
+                        des_per = pr.get_key_value(des_cell[i][j], 'flucutation')
                         estimate_shape_list.append([f"{k}: "+ des_per,j,k,1])
                     else:
-                        des_per = get_key_value(des_cell[i][j], k)
+                        des_per = pr.get_key_value(des_cell[i][j], k)
                         estimate_shape_list.append([f"{k}: "+ des_per,j,k,1])
                 else:
-                    des_per = get_key_value(des_cell[i][j], k)
+                    des_per = pr.get_key_value(des_cell[i][j], k)
                     estimate_shape_list.append([f"{k}: "+ des_per,j,k,1])
                     
             for l in estimate_sem2:
@@ -115,7 +88,7 @@ def get_estimate_var_ind(des):
                     ll = 'mean and std.'
                 else:
                     ll = 'initial and final value'
-                des_per = get_key_value(des_cell[i][j], l)
+                des_per = pr.get_key_value(des_cell[i][j], l)
                 estimate_stat_list.append([f"{ll}: "+ des_per,j,ll,1])
     return estimate_shape_list, estimate_stat_list
 
@@ -293,4 +266,5 @@ for model_used in all_model:
 for attr in all_data.keys():
 
     all_data[attr] = np.array(all_data[attr]).T
+
 
