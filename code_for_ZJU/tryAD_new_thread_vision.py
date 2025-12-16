@@ -114,7 +114,7 @@ def TimeSeriesImage(signal, cell_num=16):
     return base64_images
 
 def TimeSeriesImageCur(signal):
-     """
+    """
     Generates a time-series visualization plot for the module current and returns it as a 
     base64-encoded image string.
     
@@ -318,3 +318,4 @@ if __name__ == "__main__":
         else:
             one_hot_result.append(2)
     one_hot_result = np.array(one_hot_result).reshape(1,-1)
+
