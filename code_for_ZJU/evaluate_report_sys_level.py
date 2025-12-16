@@ -47,31 +47,6 @@ import process_evaluation as pr
 
 sys.path = original_sys_path
 
-
-def get_key_value(data, key_name, case_sensitive=False):
-    """
-    Flexible dictionary value lookup with substring matching
-    
-    Args:
-        data: Dictionary to search
-        key_name: Substring to match in keys
-        case_sensitive: Whether to match case
-        
-    Returns:
-        Matched value or alarming errors
-    """
-    search_str = key_name if case_sensitive else key_name.lower()
-    
-    for key in data:
-        key_str = key if case_sensitive else str(key).lower()
-        if search_str in key_str:
-            value_to_return = data[key]
-            if len(value_to_return) == 0:
-                return 'none'
-            else:
-                return value_to_return
-    raise KeyError('not found '+key_name)
-
 def get_estimate_var_clu(des):
     """
     Extracts cluster-level evaluation metrics
@@ -99,21 +74,21 @@ def get_estimate_var_clu(des):
                 jj = 'initial and final'
             else:
                 jj = j
-            des_per = get_key_value(des[i]['average'], j)
+            des_per = pr.get_key_value(des[i]['average'], j)
             estimate_avg_list.append([f"{jj}: "+des_per,i,jj,0])
             if j != 'fluctuation':
-                des_per = get_key_value(des[i]['maximum'], j)
+                des_per = pr.get_key_value(des[i]['maximum'], j)
                 estimate_avg_list.append([f"{jj}: "+des_per,i,jj,0])
-                des_per = get_key_value(des[i]['minimum'], j)
+                des_per = pr.get_key_value(des[i]['minimum'], j)
                 estimate_avg_list.append([f"{jj}: "+des_per,i,jj,0])
         for k in estimate_sem2:
             if k == 'mean':
                 kk = 'mean and std.'
             else:
                 kk = k
-            des_per = get_key_value(des[i]['standard_deviation'], k)
+            des_per = pr.get_key_value(des[i]['standard_deviation'], k)
             estimate_incon_list.append([f"{kk}: "+des_per, i, kk,0])
-            des_per = get_key_value(des[i]['shannon_entropy'], k)
+            des_per = pr.get_key_value(des[i]['shannon_entropy'], k)
             estimate_incon_list.append([f"{kk}: "+des_per, i, kk,0])
 
 
@@ -271,3 +246,4 @@ for model_used in all_model:
 for attr in all_data.keys():
 
     all_data[attr] = np.array(all_data[attr]).T
+
