@@ -65,7 +65,7 @@ llm_list = ['qwen3-14b', 'qwen3-32b', 'qwen3-235b-a22b-instruct-2507', 'deepseek
 OPENAI_MODEL = llm_list[4]  # Default to qwen3-14b
 
 if 'qwen' in OPENAI_MODEL:
-    OPENAI_API_KEY = "sk-ab07cd0c228c49aab7897b6e1e8382a5"
+    OPENAI_API_KEY = "YOUR API KEY"
     OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     client = OpenAI(
         api_key=OPENAI_API_KEY,
@@ -74,7 +74,7 @@ if 'qwen' in OPENAI_MODEL:
     MAX_TOKEN = 8192  # Standard token limit
     
 elif 'deepseek' in OPENAI_MODEL:
-    OPENAI_API_KEY = "sk-4eaade62e88a40c09af5b4c139674d26"
+    OPENAI_API_KEY = "YOUR API KEY"
     OPENAI_BASE_URL = "https://api.deepseek.com"
     client = OpenAI(
         api_key=OPENAI_API_KEY,
@@ -83,8 +83,7 @@ elif 'deepseek' in OPENAI_MODEL:
     MAX_TOKEN = 8192  # Standard token limit
 
 else:
-    client = ZhipuAiClient(api_key="13ab570616de4823b2777e9b74041126.Xkj0uHXFaGHGH1Fn")
-    # client = ZhipuAiClient(api_key="0eaf5ebe67a94c7bbd66d2373bc7d53d.xglPgSVXC2EZg0Rr")
+    client = ZhipuAiClient(api_key="YOUR API KEY")
     MAX_TOKEN = 40000  # Higher limit for GLM models
 
 
@@ -297,4 +296,5 @@ if __name__ == '__main__':
 
     
     # Generate and save QA dataset
+
     generate_report_from_dataset(data_v_win_train, data_c_win_train)
