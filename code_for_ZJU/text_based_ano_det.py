@@ -18,9 +18,20 @@ import numpy as np
 from zai import ZhipuAiClient
 import pickle
 
-# API Configuration for LLM service
-OPENAI_API_KEY = "sk-e76205eae508447dbe165ad68b158858"
-OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+# Initialize appropriate API client based on model
+
+# OPENAI_MODEL = "glm-4.5"
+OPENAI_MODEL = "qwen3-14b"
+
+if 'glm' in OPENAI_MODEL: 
+    client = ZhipuAiClient(api_key="YOUR API KEY")
+else:
+    OPENAI_API_KEY = "YOUR API KEY"
+    OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    client = OpenAI(
+        api_key=OPENAI_API_KEY,
+        base_url=OPENAI_BASE_URL,
+    )
 
 # Anomaly detection criteria instructions
 ins_att = """
@@ -34,18 +45,6 @@ examples of normal individual operations: **Cells #1** have **SOC values** (5%) 
  **Cells #1** have **SOC values** (20%) compared to the rest (25%) IS normal! inconsistency like 5% or less is actually normal.
 
 """
-
-# OPENAI_MODEL = "glm-4.5"
-OPENAI_MODEL = "qwen3-14b"
-
-# Initialize appropriate API client based on model
-if 'glm' in OPENAI_MODEL: 
-    client = ZhipuAiClient(api_key="13ab570616de4823b2777e9b74041126.Xkj0uHXFaGHGH1Fn")
-else:
-    client = OpenAI(
-        api_key=OPENAI_API_KEY,
-        base_url=OPENAI_BASE_URL,
-    )
 
 def TimeSeriesText(signal):
     """
@@ -102,7 +101,7 @@ def process_sample(idx, sample, instruct, client, OPENAI_MODEL):
         print(f"Sample {idx} failed: {str(e)}")
         return (idx, None)
 
-class PreprocessedQADataset:
+class PreprocessedTimeseries:
     """Handles loading and preprocessing of battery monitoring data"""
     
     def __init__(self, jsonl_file):
@@ -152,20 +151,18 @@ if __name__ == "__main__":
     # the path to save
     dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
     
-    # dataset_name = f'C:\\Users\\14525\\Desktop\\XS-REPORT\\2predict1128_{OPENAI_MODEL}.jsonl'
+    # pick the test dataset
     dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
-    dataset = PreprocessedQADataset(dataset_name)
     
-    # dataset = PreprocessedQADataset(f"template_ad_{OPENAI_MODEL}_xs_13_20251113.jsonl")
+    # pick the samples. Note that function PreprocessedTimeseries only read the time-series data from the dataset file.
+    dataset = PreprocessedTimeseries(dataset_name)
     
-    # dataset = PreprocessedQADataset("template_ad_qa_dsv3_10.jsonl")
-
     sample_pick = dataset.samples
     # Parallel processing configuration
     max_workers = 10  # Number of concurrent API calls
     results = [None] * len(sample_pick)  # Pre-allocated results array
     
-    # Process samples in parallel (testing with sample 45)
+    # Process samples in parallel
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit analysis tasks
         futures = [
@@ -177,7 +174,7 @@ if __name__ == "__main__":
                 client=client,
                 OPENAI_MODEL=OPENAI_MODEL
             )
-            for i in [45]  # Single sample for testing
+            for i in range(len(sample_pick))
         ]
         
         # Collect results as they complete
@@ -207,4 +204,5 @@ if __name__ == "__main__":
         else:
             one_hot_result.append(2)  # Unknown/invalid result
     
+
     one_hot_result = np.array(one_hot_result).reshape(1,-1)
