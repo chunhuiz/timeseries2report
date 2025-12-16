@@ -49,6 +49,9 @@ Prompt:
 ![TS2R Framework Architecture](figs/figure_method.svg)
 <p align="center"><em>Figure: Dual-loop reflection method overview</em></p>
 
+## Video Case
+
+
 ## Quick Start
 
 ### 1. Install Dependencies
