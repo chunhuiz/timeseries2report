@@ -54,11 +54,12 @@ Prompt:
 ### 1. Report Generation
 TS2R can automatically process your input time-series data to generate descriptive reports.
 
-https://github.com/user-attachments/assets/428b5d58-137b-47f2-91d0-4c3e8d9ff60a
+https://github.com/user-attachments/assets/dcdf95a9-672c-4d81-9ce5-ef2fb9474b67
 
 ### 2. Battery downstream task practice
 The generated reports enable the battery downstream task practice using the simple conversation with LLMs.
 
+https://github.com/user-attachments/assets/063b5f5f-3104-4f68-9b73-df1e02c9814d
 
 
 
