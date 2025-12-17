@@ -50,7 +50,12 @@ Prompt:
 <p align="center"><em>Figure: Dual-loop reflection method overview</em></p>
 
 ## Video Case
+
+### 1. Report Generation
 https://github.com/user-attachments/assets/428b5d58-137b-47f2-91d0-4c3e8d9ff60a
+
+### 2. Battery downstream task practics
+
 
 ## Quick Start
 
