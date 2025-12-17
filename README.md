@@ -9,7 +9,7 @@ _This is the official implementation of **TimeSeries2Report (TS2R)** in the pape
 
 <p align="center">
 ⚡ &nbsp;<a href="#-key-features">Key Features</a>
-| &nbsp;<a href="#-ts2r-framework">Framework</a>
+| &nbsp;<a href="#-TS2R-framework">Framework</a>
 | &nbsp;<a href="#-installation--setup">Setup</a>
 | &nbsp;<a href="#-quick-start">Quick Start</a>
 | &nbsp;<a href="#-results">Results</a>
@@ -49,12 +49,17 @@ Prompt:
 ![TS2R Framework Architecture](figs/figure_method.svg)
 <p align="center"><em>Figure: Dual-loop reflection method overview</em></p>
 
-## Video Case
+## Result Video
 
 ### 1. Report Generation
+TS2R can automatically process your input time-series data to generate descriptive reports.
+
 https://github.com/user-attachments/assets/428b5d58-137b-47f2-91d0-4c3e8d9ff60a
 
-### 2. Battery downstream task practics
+### 2. Battery downstream task practice
+The generated reports enable the battery downstream task practice using the simple conversation with LLMs.
+
+
 
 
 ## Quick Start
@@ -153,9 +158,6 @@ dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 # add the path 
 dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
 ```
-## Results
-
-## Vidio for showcase
 
 ## 🔗 Citation
 
