@@ -47,7 +47,7 @@ Prompt:
 "You are a battery expert. Describe cell behavior based on: ..." (see `prompting_engineering.py` for details)
 
 ![TS2R Framework Architecture](figs/figure_method.svg)
-<p align="center"><em>Figure: Dual-loop reflection method overview</em></p>
+<p align="center"><em>Figure: TS2R framework architecture</em></p>
 
 ## Result Video
 
