@@ -10,10 +10,9 @@ _This is the official implementation of **TimeSeries2Report (TS2R)** in the pape
 <p align="center">
 ⚡ &nbsp;<a href="#-key-features">Key Features</a>
 | &nbsp;<a href="#-TS2R-framework">Framework</a>
-| &nbsp;<a href="#-installation--setup">Setup</a>
+| &nbsp;<a href="#-result-video">Result Video</a>
 | &nbsp;<a href="#-quick-start">Quick Start</a>
-| &nbsp;<a href="#-results">Results</a>
-| &nbsp;<a href="#-downstream-tasks">Downstream Tasks</a>
+| &nbsp;<a href="#-citation">Citation</a>
 </p>
 
 ---
@@ -164,17 +163,13 @@ dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_M
 
 If you find this code useful for your research, please cite
 
-- [Baoxue Li and Chunhui Zhao, Self-Reflection Enhances Large Language Models Towards Substantial Academic Response. npj Artificial Intelligence, 2025, 1, Art. no. 42.](https://doi.org/10.1038/s44387-025-00045-3)
+- [[Jiayang Yang, Chunhui Zhao, Martin Guay, Zhixing Cao. TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries. arXiv preprint arXiv:2512.16453, 2025.](https://arxiv.org/abs/2512.16453)]
 
 ```BibTeX
-@ARTICLE{10937933,
-  author={Li, Baoxue and Zhao, Chunhui},
-  journal={npj Artificial Intelligence}, 
-  title={Self-Reflection Enhances Large Language Models Towards Substantial Academic Response}, 
-  year={2025},
-  volume={1},
-  number={42},
-  doi={10.1038/s44387-025-00045-3}}
-
-
+@article{yang2025timeseries2report,
+  title={TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries},
+  author={Yang, Jiayang and Zhao, Chunhui and Guay, Martin and Cao, Zhixing},
+  journal={arXiv preprint arXiv:2512.16453},
+  year={2025}
+}
 ```
