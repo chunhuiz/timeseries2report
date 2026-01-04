@@ -71,6 +71,9 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configure API Access
+#### 2.1. Remote API calls
+If you do not have the deployed LLM in your device, you can xxx API calls of mainstream xxx like [DeepSeek](https://platform.deepseek.com/api_keys) and [Qwen](https://bailian.console.aliyun.com/?spm=5176.12818093_47.aillm.1.3be92cc9v6vQfH&tab=model&scm=20140722.S_%E5%9C%A8%E5%93%AA%E9%87%8C%E8%83%BD%E8%8E%B7%E5%8F%96%E9%98%BF%E9%87%8C%E4%BA%91%E7%99%BE%E7%82%BC%E5%B9%B3%E5%8F%B0%E7%9A%84APIkey._.RL_%E5%9C%A8%E5%93%AA%E9%87%8C%E8%83%BD%E8%8E%B7%E5%8F%96%E9%98%BF%E9%87%8C%E4%BA%91%E7%99%BE%E7%82%BC%E5%B9%B3%E5%8F%B0%E7%9A%84APIkey-LOC_aillm-OR_chat-V_3-RC_llm#/model-market).
+
 Create .env file with your LLM credentials:
 
 ```bash
@@ -80,7 +83,11 @@ OPENAI_BASE_URL="https://api.openai.com/v1"
 # For DeepSeek/other providers:
 DEEPSEEK_API_KEY="your_key"
 ```
-
+#### 2.2. Local API calls
+For local API calls, make sure that you have deployed the large model on the server. You need to set up the corresponding API interface by running `API.py` script.
+```bash
+python API.py
+```
 ### 3. Prepare Datasets
 
 Place battery time-series data in `./time_series_data` directory.
