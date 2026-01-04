@@ -72,7 +72,7 @@ pip install -r requirements.txt
 
 ### 2. Configure API Access
 #### 2.1. Remote API calls
-If you do not have the deployed LLM in your device, you can xxx API calls of mainstream xxx like [DeepSeek](https://platform.deepseek.com/api_keys) and [Qwen](https://bailian.console.aliyun.com/?spm=5176.12818093_47.aillm.1.3be92cc9v6vQfH&tab=model&scm=20140722.S_%E5%9C%A8%E5%93%AA%E9%87%8C%E8%83%BD%E8%8E%B7%E5%8F%96%E9%98%BF%E9%87%8C%E4%BA%91%E7%99%BE%E7%82%BC%E5%B9%B3%E5%8F%B0%E7%9A%84APIkey._.RL_%E5%9C%A8%E5%93%AA%E9%87%8C%E8%83%BD%E8%8E%B7%E5%8F%96%E9%98%BF%E9%87%8C%E4%BA%91%E7%99%BE%E7%82%BC%E5%B9%B3%E5%8F%B0%E7%9A%84APIkey-LOC_aillm-OR_chat-V_3-RC_llm#/model-market).
+If you do not have a deployed LLM on your device, you can utilize API calls from mainstream providers such as [DeepSeek](https://platform.deepseek.com/api_keys) and [Qwen](https://bailian.console.aliyun.com/?spm=5176.12818093_47.aillm.1.3be92cc9v6vQfH&tab=model&scm=20140722.S_%E5%9C%A8%E5%93%AA%E9%87%8C%E8%83%BD%E8%8E%B7%E5%8F%96%E9%98%BF%E9%87%8C%E4%BA%91%E7%99%BE%E7%82%BC%E5%B9%B3%E5%8F%B0%E7%9A%84APIkey._.RL_%E5%9C%A8%E5%93%AA%E9%87%8C%E8%83%BD%E8%8E%B7%E5%8F%96%E9%98%BF%E9%87%8C%E4%BA%91%E7%99%BE%E7%82%BC%E5%B9%B3%E5%8F%B0%E7%9A%84APIkey-LOC_aillm-OR_chat-V_3-RC_llm#/model-market).
 
 Create .env file with your LLM credentials:
 
@@ -80,13 +80,11 @@ Create .env file with your LLM credentials:
 # .env
 OPENAI_API_KEY="your_api_key_here"
 OPENAI_BASE_URL="https://api.openai.com/v1"
-# For DeepSeek/other providers:
-DEEPSEEK_API_KEY="your_key"
 ```
 #### 2.2. Local API calls
-For local API calls, make sure that you have deployed the large model on the server. You need to set up the corresponding API interface by running `API.py` script.
+For local API calls, make sure that you have deployed the large model on the server. You need to set up the corresponding API interface by running the `API.py` script.
 ```bash
-python API.py
+python your_file_path/API.py
 ```
 ### 3. Prepare Datasets
 
@@ -94,7 +92,7 @@ Place battery time-series data in `./time_series_data` directory.
 
 ### 4. Battery time-series report generation through simple API call
 
-run `TS2R_generation_main.py` with the following parameter settings:
+If utilizing remote API calls, run `TS2R_generation_main.py` with the following parameter settings:
 
 ```python
 # set utilized LLM
@@ -102,7 +100,7 @@ llm_list = ['qwen3-14b', 'qwen3-32b', 'qwen3-235b-a22b-instruct-2507', 'deepseek
 OPENAI_MODEL = llm_list[0] 
 
 # set TOTAL_CNT (line 281) to decide the processing and generation number of time-seires reports
-TOTAL_CNT = 3 
+TOTAL_CNT = 100 
 
 # revise the data reading method (lines 285~288) according your own data format (task JSONL file as example) 
 dataset_name = "anomaly_data.jsonl"
@@ -114,6 +112,25 @@ data_v_win_train, data_c_win_train = prre.read_data_from_json(dataset)
 # set the output path (line 296)
 OUTPUT_DATASET = f'{dir_path}\\report_{OPENAI_MODEL}_zju_{TOTAL_CNT}_{timestamp[:8]}.jsonl'
 ```
+
+If employing local API calls, run `TS2R_generation_local_main.py` with the following parameter settings:
+
+```python
+
+# set TOTAL_CNT (line 333) to decide the processing and generation number of time-seires reports
+TOTAL_CNT = 100 
+
+# revise the data reading method (lines 336~338) according your own data format (task JSONL file as example) 
+dataset_name = "anomaly_data.jsonl"
+dataset = PreprocessedDataset(dataset_name)
+data_v_win_train, data_c_win_train = prre.read_data_from_json(dataset)
+# size of data_v_win_train: (sequence_length, variable_num, battery_num)
+# size of data_c_win_train: (sequence_length, 1) (for shared-variable like current for series-connected batteries)
+
+# set the output path (line 345)
+OUTPUT_DATASET = f'{dir_path}\\report_zju_{TOTAL_CNT}_{timestamp[:8]}.jsonl'
+```
+
 
 ### 5. LLM-driven battery downstream task application --- SOC prediction
 
