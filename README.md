@@ -96,15 +96,15 @@ OPENAI_MODEL = llm_list[0]
 # set TOTAL_CNT (line 280) to decide the processing and generation number of time-seires reports
 TOTAL_CNT = 100 
 
-# revise the data reading method (lines 288~291) according your own data format (take JSONL file as example, which we have already prepared) 
-dataset_name = "human-description20251210.jsonl"
+# revise the data reading method (lines 288~291) according your own data format (take json file as example, which we have already prepared) 
+dataset_name = "human-description20251210.json"
 dataset = PreprocessedDataset(dataset_name)
 data_v_win_train, data_c_win_train = prre.read_data_from_json(dataset)
 # size of data_v_win_train: (sequence_length, variable_num, battery_num)
 # size of data_c_win_train: (sequence_length, 1) (for shared-variable like current for series-connected batteries)
 
 # set the output path (line 299)
-OUTPUT_DATASET = f'{dir_path}\\report_{OPENAI_MODEL}_zju_{TOTAL_CNT}_{timestamp[:8]}.jsonl'
+OUTPUT_DATASET = f'{dir_path}\\report_{OPENAI_MODEL}_zju_{TOTAL_CNT}_{timestamp[:8]}.json'
 ```
 
 If employing local API calls, run `TS2R_generation_local_main.py` with the following parameter settings to generate reports for time-series data in ZJU dataset:
@@ -114,15 +114,15 @@ If employing local API calls, run `TS2R_generation_local_main.py` with the follo
 # set TOTAL_CNT (line 334) to decide the processing and generation number of time-seires reports
 TOTAL_CNT = 100 
 
-# revise the data reading method (lines 342~344) according your own data format (take JSONL file as example, which we have already prepared) 
-dataset_name = "human-description20251210.jsonl"
+# revise the data reading method (lines 342~344) according your own data format (take json file as example, which we have already prepared) 
+dataset_name = "human-description20251210.json"
 dataset = PreprocessedDataset(dataset_name)
 data_v_win_train, data_c_win_train = prre.read_data_from_json(dataset)
 # size of data_v_win_train: (sequence_length, variable_num, battery_num)
 # size of data_c_win_train: (sequence_length, 1) (for shared-variable like current for series-connected batteries)
 
 # set the output path (line 351)
-OUTPUT_DATASET = f'{dir_path}\\report_zju_{TOTAL_CNT}_{timestamp[:8]}.jsonl'
+OUTPUT_DATASET = f'{dir_path}\\report_zju_{TOTAL_CNT}_{timestamp[:8]}.json'
 ```
 Similarly, you can also generate reports for MIT/TJU dataset using `TS2R_generation_mit_main.py`/`TS2R_generation_tju_main.py`, and `TS2R_generation_local_mit_main.py`/`TS2R_generation_local_tju_main.py` through API calls.
 
@@ -140,7 +140,7 @@ test_set = '20251210'
 dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 
 # add the path where TS2R report is stored (line 129)
-dataset_name = current_file_path.parents[0] / "output_data" / f"report_pred_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+dataset_name = current_file_path.parents[0] / "output_data" / f"report_pred_{OPENAI_MODEL}_zju_100_{test_set}.json"
 ```
 
 ### 6. LLM-driven battery downstream task application --- anomaly detection
@@ -158,10 +158,10 @@ dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 
 # add the path where TS2R report is stored (lines 171~175)
 # for normally operation cases
-dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.json"
     
 # for abnormally operation cases
-# dataset_name = current_file_path.parents[0] / "output_data" / f"report_ano_{OPENAI_MODEL}_zju_3_{test_set}.jsonl"
+# dataset_name = current_file_path.parents[0] / "output_data" / f"report_ano_{OPENAI_MODEL}_zju_3_{test_set}.json"
 ```
 
 ### 7. LLM-driven battery downstream task application --- charging/discharging management
@@ -178,7 +178,7 @@ test_set = '20251210'
 dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 
 # add the path where TS2R report is stored (line 157)
-dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.json"
 ```
 
 ## 🔗 Citation

@@ -340,7 +340,7 @@ def multivariate_seed_qa(model_config: dict, data_v_seen, data_c_seen, data_v_pr
 
 def generate_seed_qa_dataset(model_config: dict, data_v_win_train, data_c_win_train):
     dir_path = os.getcwd()
-    OUTPUT_DATASET = f'{dir_path}/template_nca_description.jsonl'
+    OUTPUT_DATASET = f'{dir_path}/template_nca_description.json'
     item = none
     with open(OUTPUT_DATASET, 'wt') as f:
         i = 0

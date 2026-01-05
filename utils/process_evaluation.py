@@ -75,12 +75,12 @@ def set_all_seeds(seed=6):
     # Special configuration for PyTorch CUDA operations
     os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
 
-def read_jsonl(file_path, pass_sample=[]):
+def read_json(file_path, pass_sample=[]):
     """
-    Robust JSONL file reader with encoding detection
+    Robust json file reader with encoding detection
     
     Args:
-        file_path: Path to JSONL file
+        file_path: Path to json file
         pass_sample: List of line numbers to skip
         
     Returns:

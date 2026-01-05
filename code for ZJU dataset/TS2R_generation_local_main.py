@@ -60,7 +60,7 @@ sys.path = original_sys_path
 SYSTEM_PROMPT, SYSTEM_PROMPT2, SYSTEM_PROMPT3, SYSTEM_PROMPT4, SYSTEM_PROMPT5 = pe.expert_prompt_for_report()
 
 class PreprocessedDataset:
-    """Handle loading and preprocessing of JSONL dataset files.
+    """Handle loading and preprocessing of json dataset files.
     
     Attributes:
         samples (List[Dict]): List of processed data samples
@@ -68,19 +68,19 @@ class PreprocessedDataset:
     Methods:
         _load_data: Internal method for loading and cleaning data
     """
-    def __init__(self, jsonl_file: str):
-        """Initialize dataset by loading from specified JSONL file.
+    def __init__(self, json_file: str):
+        """Initialize dataset by loading from specified json file.
         
         Args:
-            jsonl_file: Path to JSONL data file
+            json_file: Path to json data file
         """
-        self.samples = self._load_data(jsonl_file)
+        self.samples = self._load_data(json_file)
         
-    def _load_data(self, jsonl_file: str) -> List[Dict]:
-        """Load and preprocess data from JSONL file.
+    def _load_data(self, json_file: str) -> List[Dict]:
+        """Load and preprocess data from json file.
         
         Args:
-            jsonl_file: Relative path to JSONL file
+            json_file: Relative path to json file
             
         Returns:
             List[Dict]: Processed samples containing time series data
@@ -91,10 +91,10 @@ class PreprocessedDataset:
         """
         # Resolve full file path
         current_file_path = Path(__file__)
-        jsonl_file = current_file_path.parents[0] / "time_series_data" / jsonl_file
+        json_file = current_file_path.parents[0] / "time_series_data" / json_file
         
         samples = []
-        with open(jsonl_file, 'r', encoding='latin-1') as f:
+        with open(json_file, 'r', encoding='latin-1') as f:
             for line in f:
                 # Track progress
                 print(f"Loading sample {len(samples)}")
@@ -287,7 +287,7 @@ def generate_report_from_dataset(data_v_win_train, data_c_win_train):
         data_c_win_train: List of current time series windows
         
     Writes:
-        JSONL file specified by OUTPUT_DATASET global variable
+        json file specified by OUTPUT_DATASET global variable
         
     Note:
         Processes TOTAL_CNT samples from input data
@@ -335,11 +335,11 @@ if __name__ == '__main__':
     
     # Dataset configuration
     """
-    read data from "human-description20251210.jsonl". Note that this file contains both raw time series and 
+    read data from "human-description20251210.json". Note that this file contains both raw time series and 
     attached expert-written reports. we only read the time-series part here. please refer to "evaluate_report_sys_level.py"
     and "evaluate_report_ind_level.py" for the performance assignment procedure using the expert-wrtten reports.
     """
-    dataset_name = "human-description20251210.jsonl"
+    dataset_name = "human-description20251210.json"
     dataset = PreprocessedDataset(dataset_name)
     data_v_win_train, data_c_win_train = prre.read_data_from_json(dataset)
 
@@ -348,7 +348,7 @@ if __name__ == '__main__':
     current_file_path = Path(__file__)
     dir_path = current_file_path.parents[0] / "output_data"
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    OUTPUT_DATASET = f'{dir_path}\\report_llama3_zju_{TOTAL_CNT}_{timestamp[:8]}.jsonl'
+    OUTPUT_DATASET = f'{dir_path}\\report_llama3_zju_{TOTAL_CNT}_{timestamp[:8]}.json'
     
     # Generate and save QA dataset
     generate_report_from_dataset(data_v_win_train, data_c_win_train)

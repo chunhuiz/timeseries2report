@@ -83,14 +83,14 @@ def process_sample(idx, sample, instruct, client, OPENAI_MODEL):
 class PreprocessedQADataset:
     """Handles loading and preprocessing of battery monitoring data"""
     
-    def __init__(self, jsonl_file):
-        self.samples = self._load_data(jsonl_file)
+    def __init__(self, json_file):
+        self.samples = self._load_data(json_file)
         
-    def _load_data(self, jsonl_file):
+    def _load_data(self, json_file):
         current_file_path = Path(__file__)
-        jsonl_file = current_file_path.parents[0] / "data" / jsonl_file
+        json_file = current_file_path.parents[0] / "data" / json_file
         samples = []
-        with open(jsonl_file, 'r', encoding='latin-1') as f:
+        with open(json_file, 'r', encoding='latin-1') as f:
             for line in f:
                 print(len(samples))
                 cleaned_line = line.replace('¡ãC', '°C').replace('¡ã', '°')
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     # the path to save
     dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
   
-    dataset_name = current_file_path.parents[0] / "output_data" / f"report_pred_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+    dataset_name = current_file_path.parents[0] / "output_data" / f"report_pred_{OPENAI_MODEL}_zju_100_{test_set}.json"
     
     dataset = PreprocessedQADataset(dataset_name)
 

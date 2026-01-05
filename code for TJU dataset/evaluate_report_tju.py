@@ -149,11 +149,11 @@ if __name__ == '__main__':
         current_file_path = Path(__file__)
         
         # Load human and model-generated descriptions
-        human_data_path = current_file_path.parents[0] / "time_series_data" / f"expert-reference{test_set}.jsonl"
-        model_data_path = current_file_path.parents[0] / "output_data" / f"report_{model_used}_tju_40_{test_set}.jsonl"
+        human_data_path = current_file_path.parents[0] / "time_series_data" / f"expert-reference{test_set}.json"
+        model_data_path = current_file_path.parents[0] / "output_data" / f"report_{model_used}_tju_40_{test_set}.json"
         
-        human_data, _ = pr.read_jsonl(human_data_path)
-        model_data, _ = pr.read_jsonl(model_data_path)
+        human_data, _ = pr.read_json(human_data_path)
+        model_data, _ = pr.read_json(model_data_path)
         
         # Process samples and evaluate
         evaluate_list = []

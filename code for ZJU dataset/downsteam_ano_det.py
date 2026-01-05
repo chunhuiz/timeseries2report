@@ -43,7 +43,7 @@ if 'glm' in OPENAI_MODEL:
     client = ZhipuAiClient(api_key="YOUR API KEY")
 
 else:
-    OPENAI_API_KEY = "YOUR API KEY"
+    OPENAI_API_KEY = "sk-ab07cd0c228c49aab7897b6e1e8382a5"
     OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     client = OpenAI(
         api_key= OPENAI_API_KEY,
@@ -99,29 +99,29 @@ def process_sample(idx, sample, instruct, client, OPENAI_MODEL):
 class PreprocessedQADataset:
     """Handles loading and preprocessing of battery monitoring data"""
     
-    def __init__(self, jsonl_file):
+    def __init__(self, json_file):
         """
-        Initialize dataset from JSONL file
+        Initialize dataset from json file
         
         Args:
-            jsonl_file (str): Path to data file
+            json_file (str): Path to data file
         """
-        self.samples = self._load_data(jsonl_file)
+        self.samples = self._load_data(json_file)
         
-    def _load_data(self, jsonl_file):
+    def _load_data(self, json_file):
         """
-        Load and preprocess JSONL data
+        Load and preprocess json data
         
         Args:
-            jsonl_file (str): File path
+            json_file (str): File path
             
         Returns:
             list: Processed samples with context strings
         """
         current_file_path = Path(__file__)
-        jsonl_file = current_file_path.parents[0] / "data" / jsonl_file
+        json_file = current_file_path.parents[0] / "data" / json_file
         samples = []
-        with open(jsonl_file, 'r', encoding='latin-1') as f:
+        with open(json_file, 'r', encoding='latin-1') as f:
             for line in f:
                 print(len(samples))
                 cleaned_line = line.replace('¡ãC', '°C').replace('¡ã', '°')
@@ -169,10 +169,10 @@ if __name__ == "__main__":
         os.makedirs(dir_path)
     
     # for normally operation cases
-    dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+    dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.json"
     
     # for abnormally operation cases
-    # dataset_name = current_file_path.parents[0] / "output_data" / f"report_ano_{OPENAI_MODEL}_zju_3_{test_set}.jsonl"
+    # dataset_name = current_file_path.parents[0] / "output_data" / f"report_ano_{OPENAI_MODEL}_zju_3_{test_set}.json"
     
     dataset = PreprocessedQADataset(dataset_name)
     print(f'info: anomaly detection by {OPENAI_MODEL}')
