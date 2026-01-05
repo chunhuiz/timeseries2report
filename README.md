@@ -82,7 +82,7 @@ python your_file_path/local_api.py
 
 ### 3. Prepare Datasets
 
-Place battery time-series data in `./time_series_data` directory. We have prepared the necessary data files to ensure that the code is executable. You can replace them by your own data.
+Place battery time-series data in the `./time_series_data` directory. We have already prepared the necessary data files to ensure that the code is executable. You can replace these files with your own data.
 
 ### 4. Battery time-series report generation through simple API call
 
@@ -139,8 +139,8 @@ current_file_path = Path(__file__)
 test_set = '20251210'
 dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 
-# add the path (line 129)
-dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+# add the path where TS2R report is stored (line 129)
+dataset_name = current_file_path.parents[0] / "output_data" / f"report_pred_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
 ```
 
 ### 6. LLM-driven battery downstream task application --- anomaly detection
@@ -148,16 +148,20 @@ dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_M
 run `downstream_anomaly_detection.py` with the following parameter settings:
 
 ```python
-# set utilized LLM
+# set utilized LLM (line 39)
 OPENAI_MODEL = "qwen3-14b"
 
-# set the path to save the SOC precition results (lines 123~130)
+# set the path to save the anomaly detection results (lines 162~166)
 current_file_path = Path(__file__)
 test_set = '20251210'
 dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 
-# add the path 
+# add the path where TS2R report is stored (lines 171~175)
+# for normally operation cases
 dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
+    
+# for abnormally operation cases
+# dataset_name = current_file_path.parents[0] / "output_data" / f"report_ano_{OPENAI_MODEL}_zju_3_{test_set}.jsonl"
 ```
 
 ### 7. LLM-driven battery downstream task application --- charging/discharging management
@@ -165,15 +169,15 @@ dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_M
 run `downstream_charge_management.py` with the following parameter settings:
 
 ```python
-# set utilized LLM
+# set utilized LLM (line 36)
 OPENAI_MODEL = "qwen3-14b"
 
-# set the path to save the SOC precition results (lines 123~130)
+# set the path to save the charging/discharging management results (lines 151~155)
 current_file_path = Path(__file__)
 test_set = '20251210'
 dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 
-# add the path 
+# add the path where TS2R report is stored (line 157)
 dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.jsonl"
 ```
 
