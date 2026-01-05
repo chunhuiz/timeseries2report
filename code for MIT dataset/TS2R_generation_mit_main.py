@@ -59,7 +59,7 @@ llm_list = ['qwen3-14b', 'qwen3-32b', 'qwen3-235b-a22b-instruct-2507', 'deepseek
 
 # API configuration
 
-OPENAI_MODEL = llm_list[4]  # Default to qwen3-14b
+OPENAI_MODEL = llm_list[0]  # Default to qwen3-14b
 
 if 'qwen' in OPENAI_MODEL:
     OPENAI_API_KEY = "YOUR API KEY"
@@ -249,7 +249,13 @@ if __name__ == '__main__':
     current_file_path = Path(__file__)
     dir_path = current_file_path.parents[0] / "output_data"
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    OUTPUT_DATASET = f'{dir_path}\\report_{OPENAI_MODEL}_mit_2_{TOTAL_CNT}_{timestamp[:8]}_new.jsonl'
+    OUTPUT_DATASET = f'{dir_path}\\report_{OPENAI_MODEL}_mit_{TOTAL_CNT}_{timestamp[:8]}.jsonl'
+    
+    """
+    read data from "expert-reference20251210.jsonl". Note that this file contains both raw time series and 
+    attached expert-written reports. we only read the time-series part here. please refer to "evaluate_report_mit.py"
+    for the performance assignment procedure using the expert-wrtten reports.
+    """
     
     dataset = PreprocessedDataset("expert-reference20251210.jsonl")
     data_v_win_train, _ = prre.read_data_from_json(dataset, dataset_name = 'mit')
