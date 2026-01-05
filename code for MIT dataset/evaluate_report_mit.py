@@ -5,6 +5,8 @@ This system evaluates the quality of battery time-series reports (single-cell le
 1. Comparing against human-written reference descriptions
 2. Scoring various aspects (trend, fluctuation, etc.) at cell level
 3. Generating evaluation results for multiple models
+
+Note: before you run this script, please ensure that you have set your LLM API keys in "process_evaluation.py" in utils folder.
 """
 
 import json
@@ -151,11 +153,16 @@ def read_pickle_list(all_results):
 
 
 
-model_used = "owglm-4.5"
+model_used = "qwen3-14b"
 test_set = '20251210'
 if __name__ == '__main__':
-    # test == 0: the scoring procedure; test == 1: the presentation of all the evaluation results
-    test = 1
+    """
+    First you need to set test = 0 to obtain the performance evaluation results, once the evaluation results are prepared,
+    you can set test = 1 to check the final FactScore.
+
+    Note: before you run this script, please ensure that you have set your LLM API keys in "process_evaluation.py" in utils folder.
+    """
+    test = 0
     current_file_path = Path(__file__)
     dir_path = current_file_path.parents[0] / f"report_mit_{test_set}"
     # Create output directory
