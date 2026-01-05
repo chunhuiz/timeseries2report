@@ -60,7 +60,7 @@ The generated reports enable the battery downstream task practice using the simp
 
 https://github.com/user-attachments/assets/dcdf95a9-672c-4d81-9ce5-ef2fb9474b67
 
-
+<small>You can experience chatting with TS2R using our app! For usage details, please refer to `readme_for_app` in the `TS2R_APP` folder.</small>
 
 ## Quick Start
 
