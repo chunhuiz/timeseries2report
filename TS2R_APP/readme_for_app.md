@@ -20,7 +20,7 @@ MAX_TOKENS=8192 # max token
 2. Run `splite_single_data.py` to prepare test data (as 'test.pickle') from the original data file 'TJU_raw_data.pickle'
 
 ## Run
-After configuration is completed, simply run the following command on the 'bash' terminal.
+After configuration is completed, simply run the following command on the `bash` terminal.
 
 ```bash
 streamlit run app.py
