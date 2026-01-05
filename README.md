@@ -3,7 +3,7 @@
 # TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries
 
 _This is the official implementation of **TimeSeries2Report (TS2R)** in the paper "TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries"_
-[![Paper](https://img.shields.io/badge/Paper-PDF-%2300B4FF)](https://doi.org/your-paper-doi-here)
+[![Paper](https://img.shields.io/badge/Paper-PDF-%2300B4FF)](https://arxiv.org/abs/2512.16453)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
 </div>
 
