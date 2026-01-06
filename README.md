@@ -10,7 +10,6 @@ _This is the official implementation of **TimeSeries2Report (TS2R)** in the pape
 <p align="center">
 ⚡ &nbsp;<a href="#-key-features">Key Features</a>
 | &nbsp;<a href="#-TS2R-framework">Framework</a>
-| &nbsp;<a href="#-result-video">Result Video</a>
 | &nbsp;<a href="#-quick-start">Quick Start</a>
 | &nbsp;<a href="#-citation">Citation</a>
 </p>
@@ -47,20 +46,6 @@ Prompt:
 
 ![TS2R Framework Architecture](figs/figure_method.svg)
 <p align="center"><em>Figure: TS2R framework architecture</em></p>
-
-## Result Video
-
-### 1. Report Generation
-TS2R can automatically process your input time-series data to generate descriptive reports.
-
-https://github.com/user-attachments/assets/063b5f5f-3104-4f68-9b73-df1e02c9814d
-
-### 2. Battery downstream task practice
-The generated reports enable the battery downstream task practice using the simple conversation with LLMs.
-
-https://github.com/user-attachments/assets/dcdf95a9-672c-4d81-9ce5-ef2fb9474b67
-
-<small>✨ You can experience chatting with TS2R using our app, just like in the video above! For detailed instructions, please check out `readme_for_app` in the `TS2R_APP` folder.</small>
 
 ## Quick Start
 
