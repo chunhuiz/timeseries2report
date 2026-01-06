@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Dec 11 09:30:56 2025
-
-@author: 14525
+tools and functions for report generation procedure
 """
+
 from typing import *
 import json
 import prompt_engineering as pe
@@ -313,4 +312,5 @@ def TimeSeriesText(signal, begin_idx=0, cell_num=4, dataset_name = 'zju'):
 
     else:
         raise("no such dataset!")
+
     return "\n".join(signalTextAll)
