@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Dec 11 09:04:53 2025
-
-@author: 14525
+tools and functions for reprt generation result evaluation, used by scripts like "evaluate_report_sys_level.py" and "evaluate_report_ind_level.py"
 """
 
 from openai import OpenAI
@@ -30,7 +28,7 @@ failed_samples = []  # Tracks failed sample indices
 evaluate_prompt = pe.evaluate_prompt()
 
 # API configuration for evaluation LLM
-OPENAI_API_KEY = "sk-ab07cd0c228c49aab7897b6e1e8382a5"
+OPENAI_API_KEY = "YOUR API KEYS"
 OPENAI_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 OPENAI_MODEL = 'qwen3-235b-a22b-instruct-2507'
 
@@ -252,5 +250,6 @@ def parallel_evaluation(evaluate_list):
                         pbar.write(f"❗ sample {result['sample_idx']} failed: {result['error']}")
                         pbar.set_postfix({"status": "ERROR", "current id": result["sample_idx"]})
                     
-                    pbar.update(1)  # 更新进度条
+                    pbar.update(1)  
+
     return all_results
