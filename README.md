@@ -175,7 +175,7 @@ If you find this code useful for your research, please cite
 ```BibTeX
 @article{yang2025timeseries2report,
   title={TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries},
-  author={Yang, Jiayang and Zhao, Chunhui and Guay, Martin and Cao, Zhixing},
+  author={Yang, Jiayang and Guay, Martin and Cao, Zhixing and Zhao, Chunhui},
   journal={arXiv preprint arXiv:2512.16453},
   year={2025}
 }
