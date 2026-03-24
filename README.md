@@ -168,9 +168,9 @@ dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_M
 
 ## 🔗 Citation
 
-If you find this code useful for your research, please cite
+If you find this code useful for your research, please cite (arxiv version)
 
-- [[Jiayang Yang, Chunhui Zhao, Martin Guay, Zhixing Cao. TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries. arXiv preprint arXiv:2512.16453, 2025.](https://arxiv.org/abs/2512.16453)]
+- [[Jiayang Yang, Martin Guay, Zhixing Cao, Chunhui Zhao. TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries. arXiv preprint arXiv:2512.16453, 2025.](https://arxiv.org/abs/2512.16453)]
 
 ```BibTeX
 @article{yang2025timeseries2report,
