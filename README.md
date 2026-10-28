@@ -47,6 +47,40 @@ Prompt:
 ![TS2R Framework Architecture](figs/figure_method.svg)
 <p align="center"><em>Figure: TS2R framework architecture</em></p>
 
+## 🌐 Live Demo & Video Walkthroughs
+
+🎉 **TS2R is now available online!**
+
+We have developed a web-based research prototype of TS2R that allows users to generate expert-aligned reports from battery time-series data and explore LLM-assisted battery operation and maintenance (O&M).
+
+**👉 [Try TS2R Online](https://marschange.github.io/TimeSeries2Report/)**
+
+No local installation is required to access the web interface.
+
+### 🎬 Video Demonstrations
+
+We provide two video demonstrations illustrating the workflow of our TS2R web application.
+
+**1. Report Generation**
+
+This video demonstrates how to upload battery time-series data, configure the LLM API, and automatically generate human-readable operational reports using TS2R.
+
+▶️ [Watch the Report Generation Demo](https://github.com/chunhuiz/timeseries2report/issues/2)
+
+**2. Downstream O&M Tasks**
+
+This video demonstrates how off-the-shelf LLMs can use TS2R-generated reports to answer natural-language queries and support downstream battery O&M analysis.
+
+▶️ [Watch the Downstream Tasks Demo](https://github.com/chunhuiz/timeseries2report/issues/3)
+
+## 🛠️ Build Your Own TS2R App
+
+Interested in developing your own TS2R-based application?
+
+The source code for our web-based prototype is available in the **[TS2R_app v2.0](./TS2R_app%20v2.0/)** directory.
+
+You can use this implementation as a starting point to customize the interface, extend its functionality, or develop your own LLM-assisted battery O&M applications.
+
 ## Quick Start
 
 ### 1. Install Dependencies
