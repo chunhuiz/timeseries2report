@@ -50,18 +50,6 @@ else:
         base_url=OPENAI_BASE_URL,
     )
 
-# Instruction template for anomaly detection
-ins_att = """
-Attention: 
-1. you should precisely marked the monitoring conclusion, for instance: "<ans>abnormal</ans>", so that the user can find it easily.
-2. There is certain inconsistency in the batteries, which is a normal phenomenon. Only when SIGNIFICANT inconsistency are detected will it be considered as an abnormal situation.
-Similarly, only SIGNIFICANT difference observed from specific cell will be considered as an anomaly.
-examples of normal individual operations: **Cells #1** have **SOC values** (5%) compared to the rest (6%): normal! these difference in SOC is slight! 
- **Cells #1** have **temperature values** (28 °C) compared to the rest (25 °C) IS normal! inconsistency like 3°C or less is actually normal.
- **Cells #1** have **voltage values** (3.4V) compared to the rest (3.3V) IS normal! inconsistency like 0.1V or less is actually normal.
- **Cells #1** have **SOC values** (20%) compared to the rest (25%) IS normal! inconsistency like 5% or less is actually normal.
-
-"""
 
 def process_sample(idx, sample, instruct, client, OPENAI_MODEL):
     """
@@ -82,10 +70,10 @@ def process_sample(idx, sample, instruct, client, OPENAI_MODEL):
         completion = client.chat.completions.create(
             model=OPENAI_MODEL,
             messages=[
-                {"role": "user", "content": instruct + sample["context"]+ins_att},
+                {"role": "user", "content": instruct + sample["context"]},
             ],
             extra_body={"enable_thinking": False},
-            temperature=0.7,
+            temperature=0.3,
         )
         
         answers = completion.choices[0].message.content.strip()
@@ -143,19 +131,75 @@ class PreprocessedQADataset:
 if __name__ == "__main__":
     # Analysis instruction templates
     
-    instruct1 = ("""Please analyze the following Time Series of battery module (consist of 16 series-connected LIB cells), and determine whether there are any anomalies in this time period.
-    Here are some basic informations of the involved LIB cells: Nominal Voltage: 3.2V, Operating Voltage: 2.5~3.65V, Charging/Discharging Protocal: Constant Power, Ambient Temperature: 25degC.
-    These basic informations indicate the expected normal operating ranges of LIB cells, which is important for your fault diagnosis tasks.
-    You should conduct monitoring task through cluster-level (cluster behavior) and individual-level (each specific LIB cell).
-    If a noticable anomaly is detected, you should further select the most probable anomaly type from these options:
-    A. Temperature Anomaly in specific individual cell
-    B. Temperature Anomaly of whole LIB module
-    C. Voltage Anomaly in specific individual cell
-    D. Voltage Anomaly of whole LIB module.
-    Also, you should identify the beginning sample and the ending sample of the detected anomaly, e.g., "1th~50th sample"
-    The output format: you should return your answers in the format with "The operation is <ans>normal</ans>." or "The operation is <ans>abnormal</ans>." in the begining, then the related analysis should be given.
-    If the anomaly is detected, you should output its fault types, beginning time and the endding time.
-    """)
+    instruct1 = ("""Please analyze the following Time Series of battery module (consist of 16 series-connected LIB cells), and determine whether the operation of the concerned LIB module is normal or abnormal during this time period.
+Here are some basic informations of the involved LIB cells: Nominal Voltage: 3.2V, Charging/Discharging Protocol: Constant Power, Ambient Temperature: 25 degC.
+These basic informations indicate the expected normal operating ranges of LIB cells, which is important for your fault diagnosis tasks.
+
+Follow the diagnostic procedure below strictly and in the given order.
+
+Step 1: Individual-cell screening
+
+Inspect Cell #1 through Cell #16 separately. For every cell, examine its voltage, temperature, and SOC over the entire time window. Brief extreme events must not be ignored.
+
+First determine whether one specific cell, or a small number of specific cells, clearly stands out from most of the remaining cells.
+The difference may appear in either the cell's dynamic behavior or in its temporal mean/std. values, such as a persistently higher or lower voltage, temperature, or SOC.
+
+For instance, for voltage, approximately 3.6 V is a safety-relevant upper cutoff. If any individual cell reaches or exceeds approximately 3.6 V while other cells maintain a lower voltage,
+it must be treated as an individual-cell voltage anomaly, even if the event is brief, the module-level voltage standard deviation is slight, or all cells have similar overall trends.
+
+Step 2: Module-level inconsistency screening
+
+When no single cell or small group of cells is the dominant outlier, further determine whether a module-level inconsistency exists.
+
+A module-level inconsistency means that the cell values are broadly dispersed across multiple cells, with substantial differences among the cells, but no single cell is clearly responsible for the dispersion.
+
+Therefore:
+
+- One clearly different cell indicates an individual-cell anomaly.
+- Several cells distributed across noticeably different levels, without one dominant outlier, indicate a module-level inconsistency.
+- Similar changing trends do not by themselves prove that the cells are consistent; their actual values must also be compared.
+
+Step 3: Final diagnosis
+
+After completing the individual-cell screening and the module-level inconsistency screening, determine whether the module is normal or abnormal.
+
+If no sufficiently supported anomaly is found, output exactly:
+
+The operation is <ans>normal</ans>.
+
+If an anomaly is found, select ONLY ONE most probable and dominant anomaly type from the following options:
+
+1. Temperature Anomaly in specific individual cell
+2. Temperature Inconsistency Anomaly of whole LIB module
+3. Voltage Anomaly in specific individual cell
+4. Voltage Inconsistency Anomaly of whole LIB module
+5. SOC Anomaly in specific individual cell
+6. SOC Inconsistency Anomaly of whole LIB module
+
+Then output:
+
+The operation is <ans>abnormal</ans>.
+Anomaly Type: [exactly one option from the list]
+Abnormal Cell: [one specific cell number, a small number of cells, or the whole module]
+Time Period: [beginning sample~ending sample]
+
+Attention: 
+1. Moderate cell-to-cell differences are normal in real battery modules and must not be reported as inconsistency anomalies by themselves.
+
+Typical acceptable instantaneous **max-minus-min** differences among the 16 cells include approximately:
+
+- Temperature: 1–3 degC
+- Voltage: 0.05 V
+- SOC: 3–5 percentage points
+
+Here, max-minus-min means the difference between the highest and lowest cell values at the same timestamp. 
+It measures cell-to-cell difference and must not be confused with standard deviation or the temporal standard deviation of one cell over the whole window.
+
+2. Evidence priority:
+If one cell is clearly responsible for most of the observed dispersion, classify it as an individual-cell anomaly and identify that cell. Do not misclassify this one-cell-standing-out pattern as module-level inconsistency.
+
+3. Before producing the final answer, verify that the selected variable, anomaly scope, abnormal cell, and time period are directly supported by the strongest quantitative evidence in the analysis.
+""")
     
     # Dataset configuration
     
