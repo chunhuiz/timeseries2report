@@ -212,11 +212,8 @@ If one cell is clearly responsible for most of the observed dispersion, classify
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
     
-    # for normally operation cases
+    # take normally operation cases for example
     dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.json"
-    
-    # for abnormally operation cases
-    # dataset_name = current_file_path.parents[0] / "output_data" / f"report_ano_{OPENAI_MODEL}_zju_3_{test_set}.json"
     
     dataset = PreprocessedQADataset(dataset_name)
     print(f'info: anomaly detection by {OPENAI_MODEL}')
