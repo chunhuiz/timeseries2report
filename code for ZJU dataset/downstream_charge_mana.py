@@ -71,7 +71,7 @@ def process_sample(idx, sample, instruct, client, OPENAI_MODEL):
                 {"role": "user", "content": instruct + sample["context"]},
             ],
             extra_body={"enable_thinking": False},
-            temperature=0.7,
+            temperature=0.3,
         )
         
         answers = completion.choices[0].message.content.strip()
@@ -113,38 +113,48 @@ if __name__ == "__main__":
     # Primary instruction template for charge/discharge management
 
 
-    instruct3 = ("""Please analyze the following Time Series of battery module to generate precise, actionable forecasts for charge and discharge cycle management.
-                Your Primary Task:
-1. State and Trend Analysis (Descriptive):
-**Describe the current charging/discharging state of the battery module. 
-**Report the recent state of charge (SOC) (Mean SOC, Maximal SOC, and Minimal SOC across all the cells within the module).
-**Identify the overall trend of the module's SOC (e.g., increasing, decreasing, or stable).
+    instruct3 = ("""Please analyze the following Time Series of battery module to generate precise, actionable forecasts for charge or discharge cycle management.
 
-2. Operational Forecast and Actionable Guidance:
-**Based on the current SOC parameters and trend, predict the time until the module's critical SOC cutoff condition is met.
-**Provide clear, practical operational advice regarding charge/discharge actions.
+Your primary objective is to analysis the charging (or discharging) state of battery module and predict the remaining time until the battery module reaches its SOC cutoff condition.
 
-#### Specific Cutoff Conditions:
-Charging Scenario: The charging porcess of LIB module must be terminated when the Maximal SOC reaches 97%.
-Discharging Scenario: The discharging process of LIB module must be terminated when the Minimal SOC reaches 3%.
-The maximal (minimal) SOC refer to the highest (lowest) SOC value among all individual battery cells within the module.
+Step 1: Determine the operating state.
+Use the current trend and SOC trend to decide whether the module is charging or discharging. The latest continuous active operating segment is the most important.
 
-#### sampling interval: 
-The sampling interval of involved battery time series is 1 minute.
+Step 2: Find the correct cutoff SOC.
+For charging:
+- The cutoff is reached when the highest-SOC cell in the module reaches 97%.
+- At every timestamp, "highest SOC" means the maximum SOC among the 16 cells at that timestamp. It does NOT mean the maximum value over the entire time series.
 
-There are some output examples:
-Output Example 1 (Charging):
-"Based on the observed time-series data, the battery module experiences the Charging Phase. At the most recent timestamp, the module’s Mean SOC is <ans>mean_soc</ans>%, the Maximum SOC is <ans>max_soc</ans>%, and the Minimum SOC is <ans>min_soc</ans>%. The overall SOC exhibits an upward trend. Our forecast indicates that the module's Maximum SOC will reach the 97% cutoff condition in approximately <ans>pred_time</ans> minutes. To prevent overcharging and ensure battery longevity, it is advised to terminate charging after <ans>pred_time</ans> minutes. Detailed Analysis Follows:..."
+For discharging:
+- The cutoff is reached when the lowest-SOC cell in the module reaches 3%.
+- At every timestamp, "lowest SOC" means the minimum SOC among the 16 cells at that timestamp. It does NOT mean the minimum value over the entire time series.
 
-Output Example 2 (Discharging):
-"Based on the observed time-series data, the battery module experiences the Discharging Phase. At the most recent timestamp, the module’s Mean SOC is <ans>mean_soc</ans>%, the Maximum SOC is <ans>max_soc</ans>%, and the Minimum SOC is <ans>min_soc</ans>%. The overall SOC exhibits a downward trend. Our forecast indicates that the module's Minimum SOC will reach the 3% cutoff condition in approximately <ans>pred_time</ans> minutes. To prevent deep discharge and irreversible degradation, it is advised to terminate discharging after <ans>pred_time</ans> minutes. Detailed Analysis Follows:..."
+Step 3: Estimate the SOC rate.
+For charging, estimate the positive slope of the module-level maximum-SOC trajectory during the latest continuous charging segment.
 
-### Attention:
-1. Output Format Specification: The final output must strictly adhere to the following structure, using the <ans></ans> tag to explicitly highlight all critical numerical data.
-2. You should first present all the key conclusions, and then provide the detailed analysis.
-3. The output answers should include a Detailed Analysis that fully describes the reasoning for your conclusions, which is crucial for operators to understand the basis of the operational decisions. Furthermore, provide any additional practical recommendations or safety warnings derived from the analysis.
-4. The maximal, minimal, average SOC refer to the highest, lowest, and average SOC value among all individual battery cells within the module.
-                """)
+For discharging, estimate the negative slope of the module-level minimum-SOC trajectory during the latest continuous discharging segment.
+
+Use SOC percentage points per minute. Do not confuse 50% with 0.50 when calculating the slope.
+
+Step 4: Calculate the remaining time.
+
+The sampling interval is 1 minute, so the result is in minutes.
+
+Sanity checks:
+- If charging and the current maximum SOC is below 97%, the result must be positive.
+- If discharging and the current minimum SOC is above 3%, the result must be positive.
+- Do not confuse the module maximum/minimum SOC with a temporal maximum/minimum.
+
+Unit reminder: 
+Treat all SOC values and SOC changes as percentages (%), not fractions. When estimating the SOC change rate and remaining charging/discharging time, consistently use % and % per minute.
+Using the wrong units in calculations can mess up the magnitude of the predicted remaining time.
+
+The output format:
+Your answers should include a Detailed Analysis that fully describes the reasoning for your conclusions, which is crucial for operators to understand the basis of the operational decisions. 
+Furthermore, please output one numerical answer in the end of your response:
+The predicted remaining time is <ans>XX</ans> minutes.
+Finally, provide any additional practical recommendations or safety warnings derived from the analysis.
+""")
                  
     
     # Initialize dataset
@@ -162,7 +172,7 @@ Output Example 2 (Discharging):
     sample_pick = dataset.samples
     
     # 5 independent API call for the 47th sample (you can pick other samples)
-    sample_pick = [sample_pick[46]] + [sample_pick[46]] + [sample_pick[46]] + [sample_pick[46]] + [sample_pick[46]]
+    sample_pick = [sample_pick[46]]
 
     max_workers = 10  # Concurrent API call limit
     
