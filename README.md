@@ -1,9 +1,9 @@
 <div align="center">
 
-# TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries
+# TS2R: A training-free semantic interface enabling LLM-driven interpretable management for battery energy storage systems
 
-_This is the official implementation of **TimeSeries2Report (TS2R)** in the paper "TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries"_
-[![Paper](https://img.shields.io/badge/Paper-PDF-%2300B4FF)](https://arxiv.org/abs/2512.16453)
+_This is the official implementation of **TimeSeries2Report (TS2R)** in the paper "A training-free semantic cognition framework unlocks interpretable, actionable management for battery energy storage systems"_
+[![ArXiv](https://img.shields.io/badge/Paper-PDF-%2300B4FF)](https://arxiv.org/abs/2512.16453)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
 </div>
 
@@ -23,7 +23,7 @@ _This is the official implementation of **TimeSeries2Report (TS2R)** in the pape
 ✅ **Model-agnostic** - Works with diverse LLMs (Qwen, DeepSeek, ChatGLM, Llama)  
 ✅ **No training required** - Lightweight and ready for deployment  
 
-**TS2R-integrated LLMs achieve expert-level decision quality without model retraining or architecture modification, establishing a practical path for adaptive LLM-driven battery intelligence.**
+**TS2R makes raw battery time series readable to LLMs: turning numerical signals into expert-aligned reports for zero-shot, explainable battery O&M, powered by off-the-shelf LLM APIs without task-specific training or fine-tuning.**
 
 ---
 
@@ -124,11 +124,11 @@ current_file_path = Path(__file__)
 test_set = '20251210'
 dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 
-# add the path where TS2R report is stored (line 129)
+# add the path where TS2R report is stored. Note that you should generate reports before conducting downstream tasks (line 129)
 dataset_name = current_file_path.parents[0] / "output_data" / f"report_pred_{OPENAI_MODEL}_zju_100_{test_set}.json"
 ```
 
-### 6. LLM-driven battery downstream task application --- anomaly detection
+### 6. LLM-driven battery downstream task application --- operational anomaly detection
 
 run `downstream_anomaly_detection.py` with the following parameter settings:
 
@@ -136,20 +136,16 @@ run `downstream_anomaly_detection.py` with the following parameter settings:
 # set utilized LLM (line 39)
 OPENAI_MODEL = "qwen3-14b"
 
-# set the path to save the anomaly detection results (lines 162~166)
+# set the path to save the anomaly detection results (lines 206~210)
 current_file_path = Path(__file__)
 test_set = '20251210'
 dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 
-# add the path where TS2R report is stored (lines 171~175)
-# for normally operation cases
+# add the path where TS2R report is stored (line 216)
 dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.json"
-    
-# for abnormally operation cases
-# dataset_name = current_file_path.parents[0] / "output_data" / f"report_ano_{OPENAI_MODEL}_zju_3_{test_set}.json"
 ```
 
-### 7. LLM-driven battery downstream task application --- charging/discharging management
+### 7. LLM-driven battery downstream task application --- charge/discharge decision support
 
 run `downstream_charge_management.py` with the following parameter settings:
 
@@ -157,12 +153,12 @@ run `downstream_charge_management.py` with the following parameter settings:
 # set utilized LLM (line 36)
 OPENAI_MODEL = "qwen3-14b"
 
-# set the path to save the charging/discharging management results (lines 151~155)
+# set the path to save the charging/discharging decision support results (lines 161~165)
 current_file_path = Path(__file__)
 test_set = '20251210'
 dir_path = current_file_path.parents[0] / f"downstream_result_{test_set}"
 
-# add the path where TS2R report is stored (line 157)
+# add the path where TS2R report is stored (line 167)
 dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_MODEL}_zju_100_{test_set}.json"
 ```
 
