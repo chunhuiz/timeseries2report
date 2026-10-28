@@ -1,6 +1,6 @@
 <div align="center">
 
-# TS2R: A training-free semantic interface enabling LLM-driven interpretable management for battery energy storage systems
+# TS2R: A Training-Free Semantic Interface for Zero-Shot, Explainable LLM-Assisted Battery Energy Storage O&M
 
 _This is the official implementation of **TimeSeries2Report (TS2R)** in the paper "A training-free semantic cognition framework unlocks interpretable, actionable management for battery energy storage systems"_
 [![ArXiv](https://img.shields.io/badge/Paper-PDF-%2300B4FF)](https://arxiv.org/abs/2512.16453)
