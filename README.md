@@ -8,11 +8,11 @@ _This is the official implementation of **TimeSeries2Report (TS2R)** in the pape
 </div>
 
 <p align="center">
-⚡ &nbsp;<a href="#-key-features">Key Features</a>
-| &nbsp;<a href="#-TS2R-framework">Framework</a>
-| &nbsp;<a href="#-Live-Demo-&-Video-Walkthroughs">Live Demo & Video Walkthroughs</a>
-| &nbsp;<a href="#-quick-start">Quick Start</a>
-| &nbsp;<a href="#-citation">Citation</a>
+  ⚡ &nbsp;<a href="#-key-features">Key Features</a>
+  | &nbsp;<a href="#-ts2r-framework">Framework</a>
+  | &nbsp;<a href="#-live-demo--video-walkthroughs">Live Demo & Video Walkthroughs</a>
+  | &nbsp;<a href="#-quick-start">Quick Start</a>
+  | &nbsp;<a href="#-citation">Citation</a>
 </p>
 
 ---
