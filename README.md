@@ -10,6 +10,7 @@ _This is the official implementation of **TimeSeries2Report (TS2R)** in the pape
 <p align="center">
 ⚡ &nbsp;<a href="#-key-features">Key Features</a>
 | &nbsp;<a href="#-TS2R-framework">Framework</a>
+| &nbsp;<a href="#-Live-Demo-&-Video-Walkthroughs">Live Demo & Video Walkthroughs</a>
 | &nbsp;<a href="#-quick-start">Quick Start</a>
 | &nbsp;<a href="#-citation">Citation</a>
 </p>
@@ -47,7 +48,7 @@ Prompt:
 ![TS2R Framework Architecture](figs/figure_method.svg)
 <p align="center"><em>Figure: TS2R framework architecture</em></p>
 
-## 🌐 Live Demo & Video Walkthroughs
+## Live Demo & Video Walkthroughs
 
 🎉 **TS2R is now available online!**
 
@@ -73,7 +74,7 @@ This video demonstrates how off-the-shelf LLMs can use TS2R-generated reports to
 
 ▶️ [Watch the Downstream Tasks Demo](https://github.com/chunhuiz/timeseries2report/issues/3)
 
-## 🛠️ Build Your Own TS2R App
+### 🛠️ Build Your Own TS2R App
 
 Interested in developing your own TS2R-based application?
 
