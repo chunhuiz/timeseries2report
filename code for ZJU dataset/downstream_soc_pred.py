@@ -69,7 +69,7 @@ def process_sample(idx, sample, instruct, client, OPENAI_MODEL):
                 {"role": "user", "content": instruct + sample["context"]},
             ],
             extra_body={"enable_thinking": False},
-            temperature=0.7,
+            temperature=0.3,
         )
         
         answers = completion.choices[0].message.content.strip()
