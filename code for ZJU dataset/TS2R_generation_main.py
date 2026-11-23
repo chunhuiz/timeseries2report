@@ -277,7 +277,7 @@ if __name__ == '__main__':
     prre.set_all_seeds()
     
     # Encoding/processing parameters
-    TOTAL_CNT = 100  # Number of samples to generate
+    TOTAL_CNT = 1  # Number of samples to generate
     
     # Dataset configuration
     """
