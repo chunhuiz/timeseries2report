@@ -199,7 +199,7 @@ dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_M
 
 ## 🔗 Citation
 
-If you find this code useful for your research, please cite (arxiv version)
+If you find this code useful for your research, please cite
 
 - [[Jiayang Yang, Martin Guay, Zhixing Cao, Chunhui Zhao. A training-free semantic cognition framework unlocks interpretable, actionable management for battery energy storage systems. Cell Reports Physical Science, 7(12), pp. 103679, 2026.](https://www.sciencedirect.com/science/article/pii/S2666386426005850#sec5)]
 
