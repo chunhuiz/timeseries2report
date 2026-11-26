@@ -201,13 +201,19 @@ dataset_name = current_file_path.parents[0] / "output_data" / f"report_{OPENAI_M
 
 If you find this code useful for your research, please cite (arxiv version)
 
-- [[Jiayang Yang, Martin Guay, Zhixing Cao, Chunhui Zhao. TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries. arXiv preprint arXiv:2512.16453, 2025.](https://arxiv.org/abs/2512.16453)]
+- [[Jiayang Yang, Martin Guay, Zhixing Cao, Chunhui Zhao. A training-free semantic cognition framework unlocks interpretable, actionable management for battery energy storage systems. Cell Reports Physical Science, 7(12), pp. 103679, 2026.](https://www.sciencedirect.com/science/article/pii/S2666386426005850#sec5)]
 
 ```BibTeX
 @article{yang2025timeseries2report,
-  title={TimeSeries2Report prompting enables adaptive large language model management of lithium-ion batteries},
-  author={Yang, Jiayang and Guay, Martin and Cao, Zhixing and Zhao, Chunhui},
-  journal={arXiv preprint arXiv:2512.16453},
-  year={2025}
+title = {A training-free semantic cognition framework unlocks interpretable, actionable management for battery energy storage systems},
+journal = {Cell Reports Physical Science},
+volume = {7},
+number = {12},
+pages = {103679},
+year = {2026},
+issn = {2666-3864},
+doi = {https://doi.org/10.1016/j.xcrp.2026.103679},
+url = {https://www.sciencedirect.com/science/article/pii/S2666386426005850},
+author = {Jiayang Yang and Martin Guay and Zhixing Cao and Chunhui Zhao}
 }
 ```
